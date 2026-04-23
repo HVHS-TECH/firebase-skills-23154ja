@@ -7,14 +7,14 @@
 // Input:  n/a
 // Return: n/a
 /**************************************************************/
-  const firebaseConfig = {
-    apiKey: ,
-    authDomain: ,
-    databaseURL: ,
-    projectId: ,
-    storageBucket: ,
-    messagingSenderId:,
-    appId:
+ const firebaseConfig = {
+    apiKey: "AIzaSyBIzIzdh3O6NZVxwLtzc9JCF-Ig5pvg6JM",
+    authDomain: "jacob-a---23154ja---12comp.firebaseapp.com",
+    databaseURL: "https://jacob-a---23154ja---12comp-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jacob-a---23154ja---12comp",
+    storageBucket: "jacob-a---23154ja---12comp.firebasestorage.app",
+    messagingSenderId: "852576704043",
+    appId: "1:852576704043:web:060ac4c5f9aca44967bc6e"
   };
 
   // Initialize Firebase
