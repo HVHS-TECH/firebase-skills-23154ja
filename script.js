@@ -23,15 +23,30 @@ function wipe(){
 
 function initialize(){
   firebase.database().ref('users').set(
+    {
     bill: {
-      age: 4
-    }
+      age: 4,
+      feet: 2,
+      alive: true,
+    },
+      bob: {
+      age: 32,
+      feet: 2.2,
+      alive: true,
+      //pi: 3.141592653589793238462643383
+      }
+  }
   )
 }
 
 function nextYear(){
   firebase.database().ref('users').set(
     {
+       bill: {
+      age: 5,
+      feet: 1,
+      alive: true,
+    },
       bob: {
       age: 33,
       feet: 2.2,
