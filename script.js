@@ -56,3 +56,20 @@ function nextYear(){
     }
   )
 }
+
+function users(){
+  firebase.database().ref('users').once('value', outputLength, logError);
+}
+
+function outputLength(data){
+  if (data.val()==null) {
+    HTML_OUTPUT.innerHTML="404, data not found";
+  } else {
+  HTML_OUTPUT.innerHTML= Object.keys(data.val()).length;
+  }
+}
+
+function logError(errorMessage) {
+  console.log('their was an error:');
+  console.log(errorMessage);
+}
