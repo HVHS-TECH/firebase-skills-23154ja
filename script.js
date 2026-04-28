@@ -41,7 +41,7 @@ function initialize(){
 
 function nextYear(){
   firebase.database().ref('users').set(
-    {
+  /*  {
        bill: {
       age: 5,
       feet: 1,
@@ -53,18 +53,39 @@ function nextYear(){
       alive: false,
       //pi: 3.141592653589793238462643383
       }
-    }
+    } **/
+
+      {
+        trewss: [{
+      age: 5,
+      feet: 1,
+      alive: true,
+    }, 435354, {
+      0: 33,
+      1: 2.2,
+      2: false,
+      //pi: 3.141592653589793238462643383
+      }, 342, 674567]
+      }
   )
 }
 
-function users(){
+function numOfUsers(){
+  console.log("running func: numOfUsers");
+  console.log('getting user data');
   firebase.database().ref('users').once('value', outputLength, logError);
 }
 
 function outputLength(data){
+  console.log("running func: outputLength");
   if (data.val()==null) {
-    HTML_OUTPUT.innerHTML="404, data not found";
-  } else {
+console.log("no key found")
+    HTML_OUTPUT.innerHTML="404, data not found, see console";
+  } else if (typeof data.val()=='object') {
+console.log('data is not an array');
+    HTML_OUTPUT.innerHTML="404, data not found, see console";
+  }else{
+    console.log('key is an obj with a length of '+Object.keys(data.val()).length);
   HTML_OUTPUT.innerHTML= Object.keys(data.val()).length;
   }
 }
