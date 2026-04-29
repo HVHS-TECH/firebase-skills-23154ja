@@ -51,7 +51,7 @@ function nextYear(){
     console.log("running func: nextYear");
         HTML_OUTPUT.innerHTML="running func: nextYear";
   firebase.database().ref('users').set(
-  /*  {
+   {
        bill: {
       age: 5,
       feet: 1,
@@ -63,20 +63,7 @@ function nextYear(){
       alive: false,
       //pi: 3.141592653589793238462643383
       }
-    } **/
-
-      {
-        trewss: [{
-      age: 5,
-      feet: 1,
-      alive: true,
-    }, 435354, {
-      0: 33,
-      1: 2.2,
-      2: false,
-      //pi: 3.141592653589793238462643383
-      }, 342, 674567]
-      }
+    } 
   )
     console.log("database set to second state (next year)");
           HTML_OUTPUT.innerHTML="database set to second state (next year)";
@@ -85,10 +72,22 @@ function nextYear(){
 function numOfUsers(){
   console.log("running func: numOfUsers");
     HTML_OUTPUT.innerHTML="running func: numOfUsers";
+ 
   console.log('getting user data');
       HTML_OUTPUT.innerHTML="getting user data";
   firebase.database().ref('users').once('value', outputLength, logError);
 }
+
+
+function numOfUsersListener(){
+  console.log("running func: numOfUsersListener");
+    HTML_OUTPUT.innerHTML="running func: numOfUsersListener";
+     console.log('listenerActive');
+      HTML_OUTPUT.innerHTML="listenerActive";
+  firebase.database().ref('users').on('value', outputLength, logError);
+}
+
+// add button for lisner and delay
 
 function outputLength(data){
   console.log("running func: outputLength");
