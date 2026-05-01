@@ -99,8 +99,10 @@ console.log("no key found")
 console.log('data is not an object');
     HTML_OUTPUT.innerHTML="data is not an object";
   }else{
-    console.log('key is an obj with a length of '+Object.keys(data.val()).length);
+   setTimeout(() => {
+ console.log('key is an obj with a length of '+Object.keys(data.val()).length);
   HTML_OUTPUT.innerHTML= 'the object has '+Object.keys(data.val()).length+" item(s)";
+}, 50);
   }
 }
 
