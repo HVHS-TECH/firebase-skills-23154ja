@@ -28,23 +28,15 @@ function wipe(){
 function initialize(){
     console.log("running func: initialize");
                 HTML_OUTPUT.innerHTML="running func: initialize";
-  firebase.database().ref('users').set(
-    {
-    bill: {
-      age: 4,
-      feet: 2,
-      alive: true,
-    },
-      bob: {
-      age: 32,
-      feet: 2.2,
-      alive: true,
-      //pi: 3.141592653589793238462643383
-      }
-  }
-  )
+                console.log(firebase.database().ref('users').once('value', isNull, logError))
+                if(firebase.database().ref('users').once('value', isNull, logError)) {
+  firebase.database().ref('/highscoreTable').set("null");
     console.log("database set to intial state");
+HTML_OUTPUT.innerHTML="database set to intial state";
+                } else {
+  console.log("root database key is already present");
             HTML_OUTPUT.innerHTML="database set to intial state";
+}
 }
 
 function nextYear(){
@@ -99,10 +91,18 @@ console.log("no key found")
 console.log('data is not an object');
     HTML_OUTPUT.innerHTML="data is not an object";
   }else{
-   setTimeout(() => {
- console.log('key is an obj with a length of '+Object.keys(data.val()).length);
+    console.log('key is an obj with a length of '+Object.keys(data.val()).length);
   HTML_OUTPUT.innerHTML= 'the object has '+Object.keys(data.val()).length+" item(s)";
-}, 50);
+  }
+}
+
+function isNull(data){
+ console.log("running func: isNull");
+  if (data.val()==null) {
+    console.log("is Null")
+    return(true);
+ } else {
+    return(false);
   }
 }
 
