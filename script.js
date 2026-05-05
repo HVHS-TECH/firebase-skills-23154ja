@@ -20,28 +20,28 @@ let score = 4
 /**************************************************************/
 function reset() {
   console.log("running func: reset");
-  firebase.database().ref('/').set({highscoreTable: "Null"})
+  firebase.database().ref('/').set({game1: 'NaN'})
   console.log("database reset");
 }
 
 function setScore() {
     console.log("running func: setScore");
-      firebase.database().ref('/game1/users'+user).set({highscoreTable: "Null"})
+      firebase.database().ref('/game1/users/'+user+'/score').set(score)
+      console.log("score of user: [" + user + "] is set to " + score);
 }
-/**
+
 function initialize() {
   console.log("running func: initialize");
-  HTML_OUTPUT.innerHTML = "running func: initialize";
-  console.log(firebase.database().ref('users').once('value', isNull, logError))
-  if (firebase.database().ref('/highscoreTable').once('value', isNull, logError)) {
-    firebase.database().ref('/highscoreTable').set("null");
+    firebase.database().ref('/game1/users').set({
+      bob: {score: 2},
+ben: {score: 7},
+bill: {score: 64984}
+    });
     console.log("database set to intial state");
-    HTML_OUTPUT.innerHTML = "database set to intial state";
-  } else {
-    console.log("root database key is already present");
-    HTML_OUTPUT.innerHTML = "database set to intial state";
-  } // is null check doesnt work
-}
+  } 
+
+
+/**
 
 function nextYear() {
   console.log("running func: nextYear");
@@ -65,40 +65,36 @@ function nextYear() {
   HTML_OUTPUT.innerHTML = "database set to second state (next year)";
 }
 
-
-function numOfUsers() {
-  console.log("running func: numOfUsers");
-  HTML_OUTPUT.innerHTML = "running func: numOfUsers";
-
-  console.log('getting user data');
-  HTML_OUTPUT.innerHTML = "getting user data";
-  firebase.database().ref('users').once('value', outputLength, logError);
-}
-
-
-function numOfUsersListener() {
-  console.log("running func: numOfUsersListener");
-  HTML_OUTPUT.innerHTML = "running func: numOfUsersListener";
-  console.log('listenerActive');
-  HTML_OUTPUT.innerHTML = "listenerActive";
-  firebase.database().ref('users').on('value', outputLength, logError);
-}
  */
 
+function displayUserScore() {
+  console.log("running func: displayUserScore");
+
+  console.log('getting user data');
+  firebase.database().ref('game1/users/'+user+"/score").once('value', outputVal, logError);
+}
 
 
-function outputLength(data) {
-  console.log("running func: outputLength");
-  HTML_OUTPUT.innerHTML = "running func: outputLength";
+function userScoreListener() {
+  console.log("running func: userScoreListener");
+  console.log('listenerActive');
+  firebase.database().ref('game1/users/'+user+"/score").on('value', outputVal, logError);
+}
+
+
+
+
+function outputVal(data) {
+  console.log("running func: outputVal");
+  HTML_OUTPUT.innerHTML = "running func: outputVal";
   if (data.val() == null) {
     console.log("no key found")
     HTML_OUTPUT.innerHTML = "no key found";
-  } else if (!(typeof data.val() == 'object')) {
-    console.log('data is not an object');
-    HTML_OUTPUT.innerHTML = "data is not an object";
+  } else if ((typeof data.val() == 'object')) {
+    console.log('data is an object');
   } else {
-    console.log('key is an obj with a length of ' + Object.keys(data.val()).length);
-    HTML_OUTPUT.innerHTML = 'the object has ' + Object.keys(data.val()).length + " item(s)";
+    console.log('value is ' + data.val());
+    HTML_OUTPUT.innerHTML = 'value is ' + data.val();
   }
 }
 
