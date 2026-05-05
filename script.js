@@ -67,11 +67,17 @@ function nextYear() {
 
  */
 
-function displayUserScore() {
-  console.log("running func: displayUserScore");
-
+function readUserScore() {
+  console.log("running func: readUserScore");
   console.log('getting user data');
   firebase.database().ref('game1/users/'+user+"/score").once('value', outputVal, logError);
+}
+
+
+function readHighScores() {
+  console.log("running func: readUserScore");
+  console.log('getting user data');
+  firebase.database().ref('game1/users').once('value', outputVal, logError);
 }
 
 
@@ -90,8 +96,6 @@ function outputVal(data) {
   if (data.val() == null) {
     console.log("no key found")
     HTML_OUTPUT.innerHTML = "no key found";
-  } else if ((typeof data.val() == 'object')) {
-    console.log('data is an object');
   } else {
     console.log('value is ' + data.val());
     HTML_OUTPUT.innerHTML = 'value is ' + data.val();
