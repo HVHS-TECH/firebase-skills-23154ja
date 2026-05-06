@@ -19,26 +19,29 @@ let score = 4
 // This means it replaces the whole database with message:Hello World
 /**************************************************************/
 function reset() {
+    console.log("");
   console.log("running func: reset");
-  firebase.database().ref('/').set({game1: 'NaN'})
+  firebase.database().ref('/').set({ game1: 'NaN' })
   console.log("database reset");
 }
 
 function setScore() {
-    console.log("running func: setScore");
-      firebase.database().ref('/game1/users/'+user+'/score').set(score)
-      console.log("score of user: [" + user + "] is set to " + score);
+   console.log("");
+ console.log("running func: setScore");
+  firebase.database().ref('/game1/users/' + user + '/score').set(score)
+  console.log("score of user: [" + user + "] is set to " + score);
 }
 
 function initialize() {
-  console.log("running func: initialize");
-    firebase.database().ref('/game1/users').set({
-      bob: {score: 2},
-ben: {score: 7},
-bill: {score: 64984}
-    });
-    console.log("database set to intial state");
-  } 
+   console.log("");
+ console.log("running func: initialize");
+  firebase.database().ref('/game1/users').set({
+    bob: { score: 2 },
+    ben: { score: 7 },
+    bill: { score: 64984 }
+  });
+  console.log("database set to initial state");
+}
 
 
 /**
@@ -68,42 +71,67 @@ function nextYear() {
  */
 
 function readUserScore() {
-  console.log("running func: readUserScore");
+   console.log("");
+ console.log("running func: readUserScore");
   console.log('getting user data');
-  firebase.database().ref('game1/users/'+user+"/score").once('value', outputVal, logError);
+  firebase.database().ref('game1/users/').once('value', (data) => { outputUserScore(data, user) }, logError);
 }
 
 
 function readHighScores() {
-  console.log("running func: readUserScore");
+   console.log("");
+ console.log("running func: readHighScores");
   console.log('getting user data');
-  firebase.database().ref('game1/users').once('value', outputVal, logError);
+  firebase.database().ref('game1/users').once('value', outputHighScores, logError);
 }
 
 
 function userScoreListener() {
-  console.log("running func: userScoreListener");
+    console.log("");
+console.log("running func: userScoreListener");
   console.log('listenerActive');
-  firebase.database().ref('game1/users/'+user+"/score").on('value', outputVal, logError);
-}
+firebase.database().ref('game1/users/').once('value', (data) => { outputUserScore(data, user) }, logError);}
 
 
 
 
-function outputVal(data) {
-  console.log("running func: outputVal");
-  HTML_OUTPUT.innerHTML = "running func: outputVal";
-  if (data.val() == null) {
+function outputUserScore(data, userName) {
+  console.log("");
+  console.log("running func: outputUserScore");
+  let userObj = data.val();
+  if (userObj == null) {
     console.log("no key found")
     HTML_OUTPUT.innerHTML = "no key found";
   } else {
-    console.log('value is ' + data.val());
-    HTML_OUTPUT.innerHTML = 'value is ' + data.val();
+    console.log('[' + userName + '] got a score of ' + userObj[userName].score);
+    HTML_OUTPUT.innerHTML = userName + ' got a score of ' + userObj[userName].score;
   }
 }
 
+function outputHighScores(data) {
+    console.log("");
+console.log("running func: outputHighScores");
+  let userObj = data.val();
+  if (userObj == null) {
+    console.log("no key found")
+    HTML_OUTPUT.innerHTML = "no key found";
+  } else {
+    HTML_OUTPUT.innerHTML = '';
+    let names = Object.keys(userObj);
+    for (i = 0; i < names.length; i++) {
+      let userName = names[i];
+      console.log('[' + userName + '] got a score of ' + userObj[userName].score)
+          HTML_OUTPUT.innerHTML += userName + ' got a score of ' + userObj[userName].score+'<br>'
+    }
+  }
+}
+
+
+
+
 function isNull(data) {
-  console.log("running func: isNull");
+   console.log("");
+ console.log("running func: isNull");
   if (data.val() == null) {
     console.log("is Null")
     return (true);
@@ -113,7 +141,8 @@ function isNull(data) {
 }
 
 function logError(errorMessage) {
-  console.log('their was an error: ');
+   console.log("");
+ console.log('their was an error: ');
   console.log(errorMessage);
   HTML_OUTPUT.innerHTML = errorMessage;
 
