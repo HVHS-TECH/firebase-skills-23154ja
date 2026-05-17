@@ -84,7 +84,7 @@ function readHighScoresValSort() {
   console.log("running func: readHighScores");
   console.log('getting user data');
   firebase.database().ref('game1/users').orderByChild('score').limitToLast(10).once('value', ((data) => { outputHighScores(data, true) }), logError);
-} // limited to ten no reson
+} // limited to ten no reason
 
 
 function readHighScoresNameSort() {
@@ -92,7 +92,7 @@ function readHighScoresNameSort() {
   console.log("running func: readHighScores");
   console.log('getting user data');
   firebase.database().ref('game1/users').orderByKey().limitToLast(10).once('value', ((data) => { outputHighScores(data, false) }), logError);
-} // limited to ten no reson
+} // limited to ten no reason
 
 function userScoreListener() {
   console.log("");
@@ -134,23 +134,3 @@ function outputHighScores(data, flip) {
 }
 
 
-
-
-function isNull(data) {
-  console.log("");
-  console.log("running func: isNull");
-  if (data.val() == null) {
-    console.log("is Null")
-    return (true);
-  } else {
-    return (false);
-  }
-}
-
-function logError(errorMessage) {
-  console.log("");
-  console.log('their was an error: ');
-  console.log(errorMessage);
-  HTML_OUTPUT.innerHTML = errorMessage;
-
-}
