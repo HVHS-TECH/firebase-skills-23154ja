@@ -134,3 +134,4 @@ function outputHighScores(data, flip) {
 }
 
 
+firebase.database().ref('/').on('value', s => HTML_OUTPUT.innerHTML = `<pre style="text-align:left;font-family:monospace;">${JSON.stringify(s.val(), null, 2)}</pre>`, logError);
