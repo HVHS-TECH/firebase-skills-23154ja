@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+
+    div#PublicKey, div#finalKey, div#output{
+    word-break: break-all;
+    overflow-wrap: break-word;
+ 
+  }
+
+  input[type="number"], input[type="text"] {
+    width: 100%;
+   
+  }
+
+
+</style>
+</head>
+
+<body>
+
+  <p>base</p>
+  <input type="number" id="base" value="2">
+
+  <p>modulus</p>
+  <input type="number" id="modulus" value="123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234566893">
+  <br>
+  <br>
+  <button onclick="generatePublicKey()">generatePublicKey</button>
+
+  <p>Public Key:</p>
+
+  <div id="PublicKey"></div>
+
+  <p>other public key</p>
+  <input type="number" id="otherPublicKey">
+  <br>
+  <br>
+  <button onclick="generateFinalKey()">generateFinalKey</button>
+
+  <p>final Key:</p>
+
+  <div id="finalKey"></div>
+
+<br>
+  <br><br>
+  <br><br>
+  <br>
+  
+  <p>message:</p>
+
+  <input type="text" id="message"
+  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z\s.,?!:;]/g, '')" 
+  pattern="[A-Z\s.,?!:;]+" 
+>
+
+  <br><br>
+
+    <button onclick="encryptAndDecrypt(1)">encrypt</button>
+  <button onclick="encryptAndDecrypt(-1)">decrypt</button>
+
+    <div id="output"></div>
+
+  <script>
+
+    const ALPHABET = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',' ','.','?','!',',',':',';']
+
+    let PublicKey
+
+    let base
+
+    let modulus
+
+    let privateKey
+
+    let otherPublicKey
+
+    let finalKey
+
+/*
+
+    for (let i = 0; i < 100; i++) {
+      generatePublicKey()
+let aPub = PublicKey
+let aPri = privateKey
+      generatePublicKey()
+      let bPub = PublicKey
+let bPri = privateKey
+
+document.getElementById('otherPublicKey').value=aPub
+
+let bFinal = generateFinalKey()
+
+document.getElementById('otherPublicKey').value=bPub
+ PublicKey = aPub
+ privateKey = aPri
+
+ let aFinal = generateFinalKey()
+
+ if(aFinal===bFinal){
+  console.log(i+1+" worked")
+ } else {
+  console.log(i+1 +" didn't work")
+  break
+ }
+    }
+*/
+
+    function generatePublicKey() {
+
+      base = BigInt(document.getElementById('base').value)
+
+      modulus = BigInt(document.getElementById('modulus').value)
+
+
+      privateKey = generatePrivateKey(String(modulus).length)
+
+      console.log(privateKey)
+
+      // let b = generatePrivateKey(String(modulus).length)
+
+      //console.log(b)
+
+
+
+       PublicKey = calcMod(base, privateKey, modulus)
+
+      console.log(PublicKey)
+
+
+      // let bPublic = (base**b)%modulus
+
+      //console.log(bPublic)
+
+      document.getElementById("PublicKey").innerText = PublicKey
+
+    }
+
+    function generateFinalKey() {
+
+      otherPublicKey = BigInt(document.getElementById('otherPublicKey').value)
+
+      finalKey = calcMod(otherPublicKey, privateKey, modulus)
+
+
+      console.log(finalKey)
+
+      document.getElementById('finalKey').innerText = finalKey
+
+    }
+
+
+    function generatePrivateKey(maxDigits) {
+      let key = 0n
+      let limit
+
+      for (let i = 0; i < maxDigits; i++) {
+
+        key = key * 10n
+
+        limit = Math.floor(Math.random() * 10)
+
+        for (let i2 = 0; i2 < limit; i2++)
+          key = key + 1n
+      }
+      return (key)
+
+    }
+
+
+    function calcMod(equBase, equExponent, equModulus) {
+
+
+       equBase = BigInt(equBase)
+       equExponent = BigInt(equExponent)
+       equModulus = BigInt(equModulus)
+      
+              equBase = equBase % equModulus
+
+
+      console.log(equBase, equExponent, equModulus)
+
+     
+      let tempExponent
+
+      let tempBase
+
+      let finalValue = 1n
+
+      while (equExponent != 0) {
+
+        console.log('loop')
+
+        tempExponent = 2n ** BigInt(Math.floor(Math.log2(Number(equExponent))))
+
+        console.log(tempExponent)
+
+        equExponent = equExponent - tempExponent
+
+        console.log(equExponent + tempExponent, equExponent)
+
+        tempBase = equBase
+
+        console.log(tempBase)
+
+        console.log('forloop')
+
+        for (let i = 0; i < Math.log2(Number(tempExponent)); i++) {
+
+          tempBase = tempBase ** 2n % equModulus
+
+          console.log(tempBase)
+
+        }
+
+        finalValue = finalValue * tempBase % equModulus
+console.log(finalValue)
+      
+      }
+
+      return (finalValue)
+
+
+
+    }
+
+
+function encryptAndDecrypt(which) {
+    let newMessage=''
+    let message = document.getElementById('message').value
+    
+    for (let i = 0; i < message.length; i++) {
+      
+     // console.log(message[i])
+
+      newMessage = newMessage + ALPHABET[
+        (ALPHABET.indexOf(message[i])
+        
+        + Math.ceil(100/ALPHABET.length+2)*ALPHABET.length +
+        
+        which*Number( String(finalKey)[(2*i)%String(finalKey).length] + String(finalKey)[(2*i+1)%String(finalKey).length] ))
+        
+        %ALPHABET.length]
+
+       // console.log(Number( String(finalKey)[(2*i)%String(finalKey).length] + String(finalKey)[(2*i+1)%String(finalKey).length] ))
+      
+    }
+console.log(newMessage)
+
+document.getElementById('output').innerText=newMessage
+  }
+
+
+    //let aa = true;
+    //let ab=0
+    // while (aa) {
+    //   ab++
+    //if( generatePrivateKey(1)==9) {
+    //  aa = false
+    //  console.log(ab)
+    //}
+
+    //}
+    /*
+        let g = 2n
+    
+          let modulus = 38557n
+    
+    
+          let a = generatePrivateKey(String(modulus).length)
+    
+          console.log(a)
+    
+          let b = generatePrivateKey(String(modulus).length)
+    
+          console.log(b)
+    
+        
+    
+          let aPublic = (g**a)%modulus
+    
+        console.log(aPublic)
+    
+    
+          let bPublic = (g**b)%modulus
+    
+          console.log(bPublic)
+    
+          
+          let finalA = (bPublic**a)%modulus
+    
+          let finalB = (aPublic**b)%modulus
+    
+          console.log(finalA)
+          console.log(finalB)
+          console.log(finalA == finalB)
+    
+    
+    function generatePrivateKey(maxDigits) {
+    let key = 0n
+    
+          for (let i = 0; i < maxDigits; i++) {
+            
+            key = key*10n
+    
+            for (let i2=0; i2 < Math.floor(Math.random()*10); i2++)
+            key=key+1n
+          }
+          return(key)
+    
+        }
+     */
+  </script>
+</body>
+
+</html>
