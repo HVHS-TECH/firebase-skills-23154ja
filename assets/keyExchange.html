@@ -6,11 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <style>
 
-    div#PublicKey, div#finalKey, div#output{
+    div#PublicKey, div#finalKey, textarea#output{
     word-break: break-all;
     overflow-wrap: break-word;
- 
+     width: 100%;
+
   }
+
+  textarea#output{
+    resize: none;
+    overflow: hidden;
+  }
+
 
   input[type="number"], input[type="text"] {
     width: 100%;
@@ -54,16 +61,20 @@
   <p>message:</p>
 
   <input type="text" id="message"
-  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z\s.,?!:;]/g, '')" 
-  pattern="[A-Z\s.,?!:;]+" 
+  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z .,?!:;]/g, '')" 
+  pattern="[A-Z.,?!:;]+" 
 >
 
-  <br><br>
+  <br>
+  <br>
 
     <button onclick="encryptAndDecrypt(1)">encrypt</button>
   <button onclick="encryptAndDecrypt(-1)">decrypt</button>
+ 
+  <br><br>
+  <br><br>
 
-    <div id="output"></div>
+    <textarea id="output" readonly="true"></textarea>
 
   <script>
 
@@ -252,6 +263,11 @@ function encryptAndDecrypt(which) {
 console.log(newMessage)
 
 document.getElementById('output').innerText=newMessage
+
+document.getElementById('output').style.height='auto'
+
+document.getElementById('output').style.height=document.getElementById('output').scrollHeight+100 + 'px'
+
   }
 
 
